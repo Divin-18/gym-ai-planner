@@ -4,12 +4,14 @@ import { authClient } from "../lib/auth";
 
 interface AuthContextType {
     user: User | null;
+    loading: boolean;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);    
 
 export const AuthProvider = ({children}: {children: React.ReactNode}) => {
     const [neonUser, setNeonUser] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
        async function loadUser() {
         try{
@@ -20,17 +22,21 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
             else{
                 setNeonUser(null);
             }
+           
         }
         catch(error){
             console.error("Error loading user:", error);
             setNeonUser(null);
+        }
+        finally{
+            setLoading(false);
         }
        }
        loadUser();
     }, []);
 
     return (
-        <AuthContext.Provider value={{user: neonUser}}>
+        <AuthContext.Provider value={{user: neonUser,loading:loading}}>
             {children}
         </AuthContext.Provider>
     )
@@ -41,5 +47,5 @@ export function useAuth(){
     if(!context){
         throw new Error("useAuth must be used within an AuthProvider");
     }
-    return context.user;
+    return context;
 }
