@@ -6,6 +6,7 @@ import { Select } from "../components/layout/ui/Select";
 import { Textarea } from "../components/layout/ui/TextArea";
 import  { Button } from "../components/layout/ui/Button";
 import { ArrowRightIcon } from "lucide-react";
+import type { UserProfile } from "../types";
 
 
 const goalOptions = [
@@ -51,7 +52,7 @@ const splitOptions = [
 ];
 
 export default function Onboarding() {
-    const {user} = useAuth();
+    const {user,saveProfile} = useAuth();
 
     const [form, setForm] = useState({
         goal: "bulk",
@@ -65,7 +66,18 @@ export default function Onboarding() {
 
     async function handleQuestionnaire(e: React.SubmitEvent) {
         e.preventDefault();
-        
+        const profile:Omit<UserProfile,"userId"|"updatedAt"> = {
+            goal:form.goal as UserProfile["goal"],
+            experience:form.experience as UserProfile["experience"],
+            daysPerWeek:form.daysPerWeek as UserProfile["daysPerWeek"],
+            session:form.sessionLength as UserProfile["session"],
+            equipment:form.equipment as UserProfile["equipment"],
+            injuries:form.injuries as UserProfile["injuries"],
+            preferredSplit:form.preferredSplit as UserProfile["preferredSplit"],
+
+        };
+        await saveProfile(profile);
+      
     }
 
 
