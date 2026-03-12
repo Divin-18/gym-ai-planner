@@ -3,6 +3,10 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Card } from "../components/layout/ui/Input";
 import { Select } from "../components/layout/ui/Select";
+import { Textarea } from "../components/layout/ui/TextArea";
+import  { Button } from "../components/layout/ui/Button";
+import { ArrowRightIcon } from "lucide-react";
+
 
 const goalOptions = [
   { value: "bulk", label: "Build Muscle (Bulk)" },
@@ -59,6 +63,11 @@ export default function Onboarding() {
         preferredSplit: "upper_lower",
     });
 
+    async function handleQuestionnaire(e: React.SubmitEvent) {
+        e.preventDefault();
+        
+    }
+
 
     if(!user){
         return <RedirectToSignIn/>
@@ -72,7 +81,7 @@ export default function Onboarding() {
                 <p className="text-muted-foreground mb-6">
                     Help us  create the  perfect  plan for you.
                 </p>
-                <form className="space-y-5">
+                <form  onSubmit={handleQuestionnaire} className="space-y-5">
                     <Select
                     id="goal"
                     label="What is your primary goal?"
@@ -120,6 +129,19 @@ export default function Onboarding() {
                     value={form.preferredSplit}
                     onChange={(e) => setForm({ ...form, preferredSplit: e.target.value })}
                     />
+                    <Textarea
+                    id="injuries"
+                    label="Do you have any injuries or limitations?"
+                    placeholder="E.g. bad knees, shoulder pain, etc."
+                    rows={3}
+                    value={form.injuries}
+                    onChange={(e) => setForm({ ...form, injuries: e.target.value })}
+                    />
+                    <div className="flex gap-3 pt-2">
+                      <Button type="submit" className="flex-1 gap-2">
+                        Generate My Plan<ArrowRightIcon className="h-4 w-4" />
+                      </Button>
+                    </div>
                 </form>
               </Card>
 
