@@ -43,8 +43,13 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
        await api.saveProfile(neonUser.id,profileData);
     }
 
+    async function generatePlan(profileData: Omit<UserProfile,"userId"|"updatedAt">) {
+        if(!neonUser) throw new Error("User not found");
+        await api.generatePlan(neonUser.id);
+    }
+
     return (
-        <AuthContext.Provider value={{user: neonUser,loading:loading,saveProfile}}>
+        <AuthContext.Provider value={{user: neonUser,loading:loading,saveProfile,generatePlan}}>
             {children}
         </AuthContext.Provider>
     )

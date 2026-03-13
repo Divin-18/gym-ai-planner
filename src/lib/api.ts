@@ -16,10 +16,10 @@ async function post(path:string,body:object) {
     return response.json();
 }
 
-// async function get(endpoint:string) {
-//     const response = await fetch(`${BASE_URL}/${endpoint}`);
-//     return response.json();
-// }
+async function get(endpoint:string) {
+    const response = await fetch(`${BASE_URL}/${endpoint}`);
+    return response.json();
+}
 
 
 
@@ -27,5 +27,8 @@ export const api = {
     async saveProfile( userId:string,profile: Omit<UserProfile,"userId"|"updatedAt">) {
          post("/profile",{userId,...profile});
     
+    },
+    async generatePlan(userId:string) {
+        get(`/plan/generate`,{userId});
     }
 }
