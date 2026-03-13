@@ -7,6 +7,7 @@ import { Textarea } from "../components/layout/ui/TextArea";
 import  { Button } from "../components/layout/ui/Button";
 import { ArrowRightIcon, Loader2 } from "lucide-react";
 import type { UserProfile } from "../types";
+import { useNavigate } from "react-router-dom";
 
 
 const goalOptions = [
@@ -52,7 +53,8 @@ const splitOptions = [
 ];
 
 export default function Onboarding() {
-    const {user,saveProfile} = useAuth();
+    const navigate = useNavigate();
+    const {user,saveProfile,generatePlan} = useAuth();
 
 
     const [form, setForm] = useState({
@@ -78,10 +80,10 @@ export default function Onboarding() {
             preferredSplit:form.preferredSplit as UserProfile["preferredSplit"],
 
         };
-        setIsGenerating(true);
         await saveProfile(profile);
-        setIsGenerating(false);
-      
+        setIsGenerating(true);
+        await generatePlan();
+        navigate("/profile");
     }
 
 

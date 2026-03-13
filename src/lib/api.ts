@@ -1,34 +1,40 @@
 import type { UserProfile } from "../types";
 const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:3000/api";
 
-async function post(path:string,body:object) {
-    const response = await fetch(`${BASE_URL}/api${path}`,{
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json",
+async function post(path: string, body: object) {
+    const response = await fetch(`${BASE_URL}${path}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
         },
-        body:JSON.stringify(body),
+        body: JSON.stringify(body),
     });
 
-    if(!response.ok){
+    if (!response.ok) {
         throw new Error(`API error: ${response.statusText}`);
     }
     return response.json();
 }
 
-async function get(endpoint:string) {
-    const response = await fetch(`${BASE_URL}/${endpoint}`);
+async function get(path: string) {
+    const response = await fetch(`${BASE_URL}${path}`);
+    if (!response.ok) {
+        throw new Error(`API error: ${response.statusText}`);
+    }
     return response.json();
 }
 
 
 
 export const api = {
-    async saveProfile( userId:string,profile: Omit<UserProfile,"userId"|"updatedAt">) {
-         post("/profile",{userId,...profile});
-    
+    get,
+    async saveProfile(userId: string, profile: Omit<UserProfile, "userId" | "updatedAt">) {
+        return post("/profile", { userId, ...profile });
     },
-    async generatePlan(userId:string) {
-        get(`/plan/generate`,{userId});
+    async generatePlan(userId: string) {
+        return post(`/plan/generate`, { userId });
+    },
+    async getCurrentPlan(userId: string) {
+        return get(`/plan/current?userId=${userId}`);
     }
 }
