@@ -12,6 +12,17 @@ datasource db {
   provider = "postgresql"
 }
 
+model training_plans {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  plan_json Json
+  plan_text String
+  version   Int      @default(1)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([userId], map: "idx_training_plans_user_id")
+}
+
 model user_profile {
   userId         String   @id @db.Uuid
   goal           String   @db.VarChar(20)

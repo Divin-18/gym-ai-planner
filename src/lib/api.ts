@@ -16,10 +16,10 @@ async function post(path:string,body:object) {
     return response.json();
 }
 
-async function get(endpoint:string) {
-    const response = await fetch(`${BASE_URL}/${endpoint}`);
-    return response.json();
-}
+// async function get(endpoint:string) {
+//     const response = await fetch(`${BASE_URL}/${endpoint}`);
+//     return response.json();
+// }
 
 
 
