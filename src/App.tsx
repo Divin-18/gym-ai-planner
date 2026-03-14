@@ -7,7 +7,7 @@ import Account from "./pages/Account"
 import Navbar from "./components/layout/Navbar"
 import { NeonAuthUIProvider } from '@neondatabase/neon-js/auth/react';
 import { authClient } from './lib/auth';
-import { AuthProvider } from './context/AuthContext';
+import AuthProvider from './context/AuthContext';
 
 function App() {
 

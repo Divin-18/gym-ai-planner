@@ -20,26 +20,33 @@ profileRouter.post("/", async (req:Request,res:Response) => {
         if(!goal || !experience || !daysPerWeek || !session || !equipment  || !preferredSplit){
             return res.status(400).json({message:"All fields are required"});
         }
+        const parsedDaysPerWeek = Number(daysPerWeek);
+        if (!Number.isInteger(parsedDaysPerWeek) || parsedDaysPerWeek <= 0) {
+            return res.status(400).json({message:"daysPerWeek must be a positive integer"});
+        }
+
+        const normalizedInjuries = typeof injuries === "string" ? injuries.trim() : "";
+
         await prisma.user_profile.upsert({
             where:{userId:userId},
             update:{ 
                 goal,
                 experience,
-                daysPerWeek:daysPerWeek,
+                daysPerWeek:parsedDaysPerWeek,
                 session:session,
                 equipment,
-                injuries:injuries||null,
-                preferredSplit:preferredSplit||null,
+                injuries:normalizedInjuries,
+                preferredSplit,
                 updated_at:new Date()
             },
             create:{
                 userId:userId,
                 goal:goal,
                 experience:experience,
-                daysPerWeek:daysPerWeek,
+                daysPerWeek:parsedDaysPerWeek,
                 session:session,
                 equipment:equipment,
-                injuries:injuries||null,
+                injuries:normalizedInjuries,
                 preferredSplit
             }
         })

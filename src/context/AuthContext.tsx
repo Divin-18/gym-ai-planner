@@ -72,7 +72,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
 
       // Fetch Plan
       const planData = await api.getCurrentPlan(neonUser.id).catch(() => null);
-      if (planData) {
+      if (planData?.planJson) {
         setPlan({
           id: planData.id,
           userId: planData.userId,
@@ -82,6 +82,8 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
           version: planData.version,
           createdAt: planData.createdAt,
         });
+      } else {
+        setPlan(null);
       }
     } catch (error) {
       console.error("Error refreshing data:", error);
@@ -98,7 +100,6 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     await api.saveProfile(neonUser.id, profileData);
-    await refreshData();
   }
 
   async function generatePlan() {

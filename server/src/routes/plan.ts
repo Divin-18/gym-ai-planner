@@ -71,19 +71,17 @@ planRouter.get("/current",async(req:Request,res:Response)=>{
       }
       const plan = await prisma.training_plans.findFirst({
         where :{userId:userId},
-        orderBy:{created_at:"desc"}
-
-
-        
+        orderBy:{createdAt:"desc"}
       })
       if(!plan){
-        return res.status(404).json({error:"Plan not found"});
+        return res.status(200).json(null);
       }
       return res.status(200).json({id:plan.id,
         userId:plan.userId,
-        version:plan.version,plan_json:plan.plan_json,
-        plan_text:plan.plan_text,
-        createdAt:plan.created_at});
+        version:plan.version,
+        planJson:plan.plan_json,
+        planText:plan.plan_text,
+        createdAt:plan.createdAt});
     }
     catch(error){
      console.log(error);
